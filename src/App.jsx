@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './components/Navbar'
+import { useState } from "react";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Manager from "./components/Manager";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
-    <Navbar/>
-      <div>My ui</div>
+      <Navbar />
+      <Manager/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
