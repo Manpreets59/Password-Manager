@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState,  } from "react";
 
 const Manager = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [form, setForm] = useState({ site: "", username: "", password: "" });
+  const [passwordArray, setpasswordArray] = useState([]);
+
+  useEffect(() => {
+    let passwords = localStorage.getItem("passwords")
+    if(passwords){
+      setpasswordArray (JSON.parse(passwords))
+    }
+  }, [])
 
   const showPassword = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
   const savePassword = () => {
-    console.log(form);
+    setpasswordArray([...passwordArray, form])
+    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+    console.log(...passwordArray, form);
+
   };
 
   const handleChange = (e) => {
