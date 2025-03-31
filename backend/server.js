@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
-const bodyparser = require('body-parser');
+const bodyparser = require("body-parser");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -9,12 +10,12 @@ dotenv.config();
 const url = "mongodb://localhost:27017";
 const client = new MongoClient(url);
 
-
 //database name
 const dbName = "passop";
 const app = express();
 const port = 3000;
 app.use(bodyparser.json());
+app.use(cors());
 
 client.connect();
 
@@ -28,20 +29,20 @@ app.get("/", async (req, res) => {
 
 //save a password
 app.post("/", async (req, res) => {
-  const password = req.body
+  const password = req.body;
   const db = client.db(dbName);
   const collection = db.collection("passwords");
   const findResult = await collection.insertOne(password);
-  res.json({success : true , result : findResult});
+  res.json({ success: true, result: findResult });
 });
 
 //delete a password by id
 app.delete("/", async (req, res) => {
-  const password = req.body
+  const { id } = req.body;
   const db = client.db(dbName);
   const collection = db.collection("passwords");
-  const findResult = await collection.deleteOne(password);
-  res.json({success : true , result : findResult});
+  const findResult = await collection.deleteOne({ id });
+  res.json({ success: true, result: findResult });
 });
 
 app.listen(port, () => {
