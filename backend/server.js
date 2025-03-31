@@ -27,22 +27,26 @@ app.get("/", async (req, res) => {
   res.json(findResult);
 });
 
-//save a password
+// Save or update a password
 app.post("/", async (req, res) => {
   const password = req.body;
   const db = client.db(dbName);
   const collection = db.collection("passwords");
-  const findResult = await collection.insertOne(password);
-  res.json({ success: true, result: findResult });
+  const insertResult = await collection.insertOne(password);
+  res.json({ success: true, result: insertResult });
 });
 
-//delete a password by id
+// Delete a password by id
 app.delete("/", async (req, res) => {
   const { id } = req.body;
   const db = client.db(dbName);
   const collection = db.collection("passwords");
-  const findResult = await collection.deleteOne({ id });
-  res.json({ success: true, result: findResult });
+  const deleteResult = await collection.deleteOne({ id });
+  if (deleteResult.deletedCount === 1) {
+    res.json({ success: true, message: "Password deleted successfully" });
+  } else {
+    res.json({ success: false, message: "Password not found" });
+  }
 });
 
 app.listen(port, () => {

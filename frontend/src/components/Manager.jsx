@@ -42,13 +42,35 @@ const Manager = () => {
       form.username.length > 3 &&
       form.password.length > 3
     ) {
-      const newPassword = { ...form, id: uuidv4() };
-      setpasswordArray([...passwordArray, newPassword]);
-      await fetch("http://localhost:3000/", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(newPassword),
-      });
+      if (form.id) {
+        // Editing an existing password
+        // Delete the old password from the database
+        await fetch("http://localhost:3000/", {
+          method: "DELETE",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id: form.id }),
+        });
+
+        // Save the updated password
+        const updatedPassword = { ...form, id: uuidv4() };
+        setpasswordArray((prev) =>
+          prev.map((item) => (item.id === form.id ? updatedPassword : item))
+        );
+        await fetch("http://localhost:3000/", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(updatedPassword),
+        });
+      } else {
+        // Adding a new password
+        const newPassword = { ...form, id: uuidv4() };
+        setpasswordArray([...passwordArray, newPassword]);
+        await fetch("http://localhost:3000/", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(newPassword),
+        });
+      }
       setForm({ site: "", username: "", password: "" });
       toast("Password saved!", {
         position: "top-right",
