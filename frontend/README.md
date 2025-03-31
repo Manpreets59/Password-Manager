@@ -18,3 +18,4 @@ LordIcons for icons
 BG.IBELICK for background colour
 Toast for tostify just like an animation that "That text is copied to clipboard "
 uuid: create unique id to store password 
+mongodb package

@@ -21,7 +21,7 @@ client.connect();
 //Get all the passwords
 app.get("/", async (req, res) => {
   const db = client.db(dbName);
-  const collection = db.collection("documents");
+  const collection = db.collection("passwords");
   const findResult = await collection.find({}).toArray();
   res.json(findResult);
 });
@@ -30,12 +30,19 @@ app.get("/", async (req, res) => {
 app.post("/", async (req, res) => {
   const password = req.body
   const db = client.db(dbName);
-  const collection = db.collection("documents");
+  const collection = db.collection("passwords");
   const findResult = await collection.insertOne(password);
-  res.json({success : true});
+  res.json({success : true , result : findResult});
 });
 
-//delete a password
+//delete a password by id
+app.delete("/", async (req, res) => {
+  const password = req.body
+  const db = client.db(dbName);
+  const collection = db.collection("passwords");
+  const findResult = await collection.deleteOne(password);
+  res.json({success : true , result : findResult});
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on http://localhost:${port}`);

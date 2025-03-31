@@ -31,26 +31,34 @@ const Manager = () => {
   const showPassword = () => {
     setIsPasswordVisible((prev) => !prev);
   };
-
+  
   const savePassword = () => {
-    setpasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
-    localStorage.setItem(
-      "passwords",
-      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
-    );
-    console.log(...passwordArray, form);
-    setForm({site:"", username:"", password:""})
-    toast("Password save!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
+    if (
+      form.site.length > 3 &&
+      form.username.length > 3 &&
+      form.password.length > 3
+    ) {
+      setpasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+      localStorage.setItem(
+        "passwords",
+        JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+      );
+      console.log(...passwordArray, form);
+      setForm({ site: "", username: "", password: "" });
+      toast("Password save!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    } else {
+      toast("Error:Password not save!");
+    }
   };
 
   const deletePassword = (id) => {
@@ -60,18 +68,19 @@ const Manager = () => {
       setpasswordArray(passwordArray.filter((item) => item.id != id));
       localStorage.setItem(
         "passwords",
-        JSON.stringify(passwordArray.filter((item) => item.id != id)))
-        toast("Password deleted!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
+        JSON.stringify(passwordArray.filter((item) => item.id != id))
+      );
+      toast("Password deleted!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
     }
   };
 
@@ -104,17 +113,17 @@ const Manager = () => {
         <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div>
       </div>
 
-      <div className="mycontainer">
-        <h1 className="text-4xl font-bold text-center  ">
+      <div className="mycontainer min-h-[91.75vh]">
+        <h1 className="text-2xl md:text-4xl font-bold text-center">
           <span className="text-green-500">&lt;</span>
           Pass
           <span className="text-green-500">OP/&gt;</span>
         </h1>
-        <p className="text-green-900 text-lg text-center ">
+        <p className="text-green-900 text-base md:text-lg text-center">
           Your own password Manager
         </p>
 
-        <div className="flex flex-col p-4 text-black gap-8 items-center ">
+        <div className="flex flex-col p-4 text-black gap-8 items-center">
           <input
             value={form.site}
             onChange={handleChange}
@@ -124,17 +133,17 @@ const Manager = () => {
             name="site"
             id=""
           />
-          <div className="flex w-full justify-between gap-8">
+          <div className="flex flex-col md:flex-row w-full justify-between gap-8">
             <input
               value={form.username}
               onChange={handleChange}
               placeholder="Enter Username"
-              className="rounded-full border border-green-500 w-full p-4 py-1"
+              className="rounded-full border border-green-500 w-full md:w-1/2 p-4 py-1"
               type="text"
               name="username"
               id=""
             />
-            <div className="relative">
+            <div className="relative w-full md:w-1/2">
               <input
                 value={form.password}
                 onChange={handleChange}
@@ -158,7 +167,7 @@ const Manager = () => {
           </div>
           <button
             onClick={savePassword}
-            className="flex justify-center  items-center  gap-4 bg-green-400 hover:bg-green-300 rounded-full px-8 py-2 w-fit border border-green-900"
+            className="flex justify-center items-center gap-4 bg-green-400 hover:bg-green-300 rounded-full px-8 py-2 w-full md:w-fit border border-green-900"
           >
             <lord-icon
               src="https://cdn.lordicon.com/jgnvfzqg.json"
@@ -168,17 +177,17 @@ const Manager = () => {
           </button>
         </div>
 
-        <div className="password">
+        <div className="password overflow-x-auto">
           <h2 className="font-bold text-2xl py-4">YOUR PASSWORD</h2>
           {passwordArray.length === 0 && <div>No Passwords to show</div>}
           {passwordArray.length != 0 && (
-            <table className="table-auto w-full rounded-md overflow-hidden">
+            <table className="table-auto w-full rounded-md overflow-hidden mb-10">
               <thead className="bg-green-800 text-white">
                 <tr>
-                  <th className="py-2">Site</th>
-                  <th className="py-2">Username</th>
-                  <th className="py-2">Password</th>
-                  <th className="py-2">Action</th>
+                  <th className="py-2 text-sm md:text-base">Site</th>
+                  <th className="py-2 text-sm md:text-base">Username</th>
+                  <th className="py-2 text-sm md:text-base">Password</th>
+                  <th className="py-2 text-sm md:text-base">Action</th>
                 </tr>
               </thead>
 
@@ -186,7 +195,7 @@ const Manager = () => {
                 {passwordArray.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td className=" py-2 border border-white text-center  ">
+                      <td className="py-2 border border-white text-center">
                         <div className="flex items-center justify-center">
                           <a href={item.site} target="_blank">
                             <span>{item.site}</span>
@@ -210,7 +219,7 @@ const Manager = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="flex items-center justify-center py-2 border border-white text-center  ">
+                      <td className="flex items-center justify-center py-2 border border-white text-center">
                         <div className="flex items-center justify-center">
                           <span>{item.username}</span>
                           <div
@@ -232,8 +241,8 @@ const Manager = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-2 border border-white text-center ">
-                        <div className="flex item-center justify-center ">
+                      <td className="py-2 border border-white text-center">
+                        <div className="flex item-center justify-center">
                           <span>{item.password}</span>
                           <div
                             className="lordiconcopy size-7 cursor-pointer"
@@ -254,7 +263,7 @@ const Manager = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-2 border border-white text-center ">
+                      <td className="py-2 border border-white text-center">
                         <span
                           className="cursor-pointer mx-2"
                           onClick={() => editPassword(item.id)}
